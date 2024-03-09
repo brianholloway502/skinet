@@ -17,6 +17,10 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 // Add repositories as services here. Transient too short, Singleton too long.
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+// We used "typeof" because it is generic and we have no types defined yet. ProductRepository had types.
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+// Register AutoMapper here so it can be used. See MappingProfiles class.
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -28,6 +32,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+// Tells API to serve static files as well.
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
