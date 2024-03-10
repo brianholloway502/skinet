@@ -1,4 +1,5 @@
-using Core.Interfaces;
+using API.Extensions;
+using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,24 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// Added connection string.
-builder.Services.AddDbContext<StoreContext>(opt =>
-{
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-// Add repositories as services here. Transient too short, Singleton too long.
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-// We used "typeof" because it is generic and we have no types defined yet. ProductRepository had types.
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-// Register AutoMapper here so it can be used. See MappingProfiles class.
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Code moved to ApplicationServicesExtensions.cs
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
