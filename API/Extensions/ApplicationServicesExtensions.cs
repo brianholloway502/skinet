@@ -45,6 +45,17 @@ namespace API.Extensions
                 };
             });
 
+            // Here is where add Cors so API data can show in a browser and can communicate with Angular.
+            // Angular will be hosted on localhost 4200.
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+
+                });
+            });
+
             return services;
         }
     }
