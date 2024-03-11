@@ -29,6 +29,9 @@ if (app.Environment.IsDevelopment())
 // Tells API to serve static files as well.
 app.UseStaticFiles();
 
+// Add CORS here as well.
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
