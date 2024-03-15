@@ -82,10 +82,16 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "client:build:production"
+              "buildTarget": "client:build:production",
+              "sslKey": "SSL/localhost-key.pem",
+              "sslCert": "SSL/localhost.pem",
+              "ssl": true
             },
-            "development": {
-              "buildTarget": "client:build:development"
+            "development": { 
+              "buildTarget": "client:build:development",
+              "sslKey": "SSL/localhost-key.pem",
+              "sslCert": "SSL/localhost.pem",
+              "ssl": true
             }
           },
           "defaultConfiguration": "development"
